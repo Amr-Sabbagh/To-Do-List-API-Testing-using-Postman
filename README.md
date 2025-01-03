@@ -32,7 +32,7 @@ Response: A 204 status indicating successful deletion, or a 404 status with a "T
 
 I have implemented automated tests using Postman. These tests cover key API endpoints, validating correct responses, status codes, and error handling for various user scenarios. The tests include checking the creation, retrieval, updating, and deletion of to do items. You can find the collection of Postman tests in the Postman Collection folder, ready to be imported and executed to validate the functionality of the API.
 
-**note:** inorder to run these collection you will need to do the following:
+**note:** inorder to run this collection you will need to do the following:
 
 + Clone the project files andensure all dependecies are present, then run the project using the command "npm start" to build the application.
 + Retrive the local host url to use it in Postman.
