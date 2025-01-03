@@ -1,0 +1,605 @@
+{
+	"info": {
+		"_postman_id": "3890fb4e-8b3a-4057-b53d-80154cb7e8b2",
+		"name": "To-Do-List",
+		"description": "This application is a simple **To-Do API** built with Node.js and Express.js. It allows users to manage a list of tasks with endpoints to perform (Create, Read, Update, Delete) operations. Here's a brief description of its endpoints:\n\n1. **GET /todos**\n    \n    - Description: Retrieves the list of all to-do items.\n        \n    - Response: An array of to-do objects, each containing an \"id\", \"title\", and \"completed\" status.\n        \n2. **GET /todos/:id**\n    \n    - Description: Fetches a specific to-do item by its ID.\n        \n    - Response: A single to-do object if found, or a 404 status with a \"Todo not found\" message if the ID does not exist.\n        \n3. **POST /todos**\n    \n    - Description: Adds a new to-do item.\n        \n    - Request Body: JSON object with a \"title\" field (optional \"completed\" field defaults to false).\n        \n    - Response: The newly created to-do object with a unique \"id\".\n        \n4. **PUT /todos/:id**\n    \n    - Description: Updates an existing to-do item by ID.\n        \n    - Request Body: JSON object with fields to be updated (\"id\", \"title\" and \"completed\").\n        \n    - Response: The updated to-do object if found, or a 404 status with a \"Todo not found\" message if the ID does not exist.\n        \n5. **DELETE /todos/:id**\n    \n    - Description: Deletes a to-do item by ID.\n        \n    - Response: A 204 status indicating successful deletion, or a 404 status with a \"Todo not found\" message if the ID does not exist.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40761079"
+	},
+	"item": [
+		{
+			"name": "Manual-Tests",
+			"item": [
+				{
+					"name": "Add-New-To-Do",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"title\": \"Added a new to do item\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/todos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-Single-To-Do",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/todos/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-To-do",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"id\": 2,\r\n \"title\": \"Learn Express updated.js\",\r\n \"completed\": false\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/todos/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-All-To-Dos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"current_To_Do_items_num\",pm.response.json().length);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/todos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-To-Do",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/todos/{{current_To_Do_items_num}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos",
+								"{{current_To_Do_items_num}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "This folder lists all APIs with no tests associated for manual testing and observations."
+		},
+		{
+			"name": "Automated-Tests",
+			"item": [
+				{
+					"name": "get-all-to-dos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"tc1: check if the response status code is 200 OK\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"tc2: check if the response schema is correct\", () => {\r",
+									"    let to_do_list_schema = {\r",
+									"        type: \"array\",\r",
+									"        items: {\r",
+									"            type: \"object\",\r",
+									"            properties: {\r",
+									"                id: { type: \"number\" },\r",
+									"                completed: { type: \"boolean\" },\r",
+									"                title: { type: \"string\" }\r",
+									"            },\r",
+									"            required: [\"id\", \"title\",\"completed\"]\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.response.to.have.jsonSchema(to_do_list_schema);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/todos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-new-to-do-item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"new_To_Do_item_id\",pm.response.json().id);\r",
+									"\r",
+									"pm.test(\"tc1: check if status code is 201 Created\", () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"tc2: Response schema is correct\", () => {\r",
+									"    let todoitem_schema = {\r",
+									"    type: \"object\",\r",
+									"    properties: {\r",
+									"        id: {type: \"number\"},\r",
+									"        completed: {type: \"boolean\"},\r",
+									"        title: {type: \"string\"}\r",
+									"    },\r",
+									"    required: [\"id\", \"completed\", \"title\"] };\r",
+									"    pm.response.to.have.jsonSchema(todoitem_schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"tc3: check if the title was set correctly\",()=>{\r",
+									"    pm.expect(pm.response.json().title).to.eq(\"Added a new to do item\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"tc4: check if the complation status is set to default false\",()=>{\r",
+									"    pm.expect(pm.response.json().completed).to.be.false;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"title\": \"Added a new to do item\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/todos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check-if-item-were-created",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"tc1: check if the status code is 404 OK\",()=>{\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"tc2: check if the same to do item id were returned\",()=>{\r",
+									"    pm.expect(pm.response.json().id).to.eq(pm.globals.get(\"new_To_Do_item_id\"));\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/todos/{{new_To_Do_item_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos",
+								"{{new_To_Do_item_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-new-to-do-item-without-a-title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"invalid_to_do_item_id\",pm.response.json().id);\r",
+									"\r",
+									"pm.test(\"tc1: check if status code is not 201 Created\", () => {\r",
+									"    pm.response.to.not.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/todos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-a-to-do-item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"tc1: check if the response status code is 204 No content\", () => {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/todos/{{invalid_to_do_item_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos",
+								"{{invalid_to_do_item_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check-if-item-were-deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"tc1: check if the response status code is 200 OK\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"tc2: check if the to do item were deleted\", () => {\r",
+									"    pm.expect(pm.response.json()).to.not.deep.include({ id: pm.globals.get(\"invalid_to_do_item_id\") });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/todos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-a-single-to-do-item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"tc1: check if status code is 200 Created\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/todos/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-an-invalid-single-to-do-item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"tc1: check if status code is 404 Todo not found\", () => {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/todos/0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-to-do-item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"tc1: check if the response status code is 200 OK\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"tc2: check if to do item is updated\", () => {\r",
+									"    pm.expect(pm.response.json()).to.eql(JSON.parse(pm.request.body.raw));\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"id\": 2,\r\n \"title\": \"Learn Express updated.js\",\r\n \"completed\": false\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/todos/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-non-existing-to-do-item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"tc1: check if the response status code is 404 Todo not found\", () => {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"id\": 2,\r\n \"title\": \"Learn Express updated.js\",\r\n \"completed\": false\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/todos/0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"todos",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "This folder list all APIs with tests' script to apply some assertions using Chai on the response returned."
+		}
+	]
+}
